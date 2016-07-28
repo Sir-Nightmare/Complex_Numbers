@@ -2,24 +2,25 @@ package com.netcracker.edu.java.tasks;
 
 /**
  * Created by Sir Nightmare on 07/28/16.
+ * Class for complex number
  */
 
 public class ComplexNumberImpl implements ComplexNumber {
 
-    private double realPart=0;
-    private double imanginaryPart=0;
+    private double realPart = 0;
+    private double imanginaryPart = 0;
 
-    public ComplexNumberImpl(double re, double im){
-        realPart=re;
-        imanginaryPart=im;
+    public ComplexNumberImpl(double re, double im) {
+        realPart = re;
+        imanginaryPart = im;
     }
 
-    public ComplexNumberImpl(String value){
+    public ComplexNumberImpl(String value) {
 
     }
 
-    public ComplexNumberImpl(){
-        this(0,0);
+    public ComplexNumberImpl() {
+        this(0, 0);
     }
 
     /**
@@ -54,8 +55,8 @@ public class ComplexNumberImpl implements ComplexNumber {
      */
     @Override
     public void set(double re, double im) {
-        realPart=re;
-        imanginaryPart=im;
+        realPart = re;
+        imanginaryPart = im;
     }
 
     /**
@@ -84,7 +85,7 @@ public class ComplexNumberImpl implements ComplexNumber {
      */
     @Override
     public ComplexNumber copy() {
-        return null;
+        return new ComplexNumberImpl(this.realPart, this.imanginaryPart);
     }
 
     /**
@@ -115,11 +116,11 @@ public class ComplexNumberImpl implements ComplexNumber {
      */
     @Override
     public int compareTo(ComplexNumber other) {
-        double firstNum =realPart*realPart+imanginaryPart*imanginaryPart;
-        double secondNum=other.getRe()*other.getRe()+other.getIm()*other.getIm();
-        if (firstNum>secondNum){
+        double firstNum = realPart * realPart + imanginaryPart * imanginaryPart;
+        double secondNum = other.getRe() * other.getRe() + other.getIm() * other.getIm();
+        if (firstNum > secondNum) {
             return 1;
-        }else if(firstNum<secondNum){
+        } else if (firstNum < secondNum) {
             return -1;
         }
         return 0;
@@ -147,8 +148,8 @@ public class ComplexNumberImpl implements ComplexNumber {
      */
     @Override
     public ComplexNumber negate() {
-        realPart*=-1;
-        imanginaryPart*=-1;
+        realPart *= -1;
+        imanginaryPart *= -1;
         return this;
     }
 
@@ -160,8 +161,8 @@ public class ComplexNumberImpl implements ComplexNumber {
      */
     @Override
     public ComplexNumber add(ComplexNumber arg2) {
-        realPart+=arg2.getRe();
-        imanginaryPart+=arg2.getIm();
+        realPart += arg2.getRe();
+        imanginaryPart += arg2.getIm();
         return this;
     }
 
@@ -175,12 +176,12 @@ public class ComplexNumberImpl implements ComplexNumber {
      */
     @Override
     public ComplexNumber multiply(ComplexNumber arg2) {
-        double x1=this.getRe();
-        double y1=this.getIm();
-        double x2=arg2.getRe();
-        double y2=arg2.getIm();
-        realPart=x1*x2-y1*y2;
-        imanginaryPart=y1*x2+x1*y2;
+        double x1 = this.getRe();
+        double y1 = this.getIm();
+        double x2 = arg2.getRe();
+        double y2 = arg2.getIm();
+        realPart = x1 * x2 - y1 * y2;
+        imanginaryPart = y1 * x2 + x1 * y2;
         return this;
     }
 }
