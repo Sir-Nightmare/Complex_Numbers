@@ -5,6 +5,11 @@ package com.netcracker.edu.java.tasks;
  * Class for complex number
  */
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+
+
 public class ComplexNumberImpl implements ComplexNumber {
 
     private double realPart = 0;
@@ -16,7 +21,49 @@ public class ComplexNumberImpl implements ComplexNumber {
     }
 
     public ComplexNumberImpl(String value) {
+        if (value.endsWith("i")) {
 
+            value = value.substring(0, value.length() - 1);
+
+            if (value.endsWith("+")) {
+                this.imanginaryPart = 1;
+                value = value.substring(0, value.length() - 1);
+                this.realPart = Double.parseDouble(value);
+                return;
+            } else if (value.endsWith("-")) {
+                this.imanginaryPart = -1;
+                value = value.substring(0, value.length() - 1);
+                this.realPart = Double.parseDouble(value);
+                return;
+            } else {
+                int tempSign1 = 1;
+                if (value.startsWith("+")) {
+                    value = value.substring(1, value.length());
+                } else if (value.startsWith("-")) {
+                    tempSign1 = -1;
+                    value = value.substring(1, value.length());
+                }
+                String[] str = value.split("\\+");
+                int tempSign2 = 1;
+
+                if (str.length == 1) {
+                    str = value.split("-");
+                    tempSign2 = -1;
+                }
+
+                if (str.length == 1) {
+                    this.realPart = 0;
+                    this.imanginaryPart = tempSign1 * Double.parseDouble(str[0]);
+                    return;
+                }
+                this.realPart = tempSign1 * Double.parseDouble(str[0]);
+                this.imanginaryPart = tempSign2 * Double.parseDouble(str[1]);
+            }
+        } else {
+            this.realPart = Double.parseDouble(value);
+            this.imanginaryPart = 0;
+            return;
+        }
     }
 
     public ComplexNumberImpl() {
@@ -74,6 +121,49 @@ public class ComplexNumberImpl implements ComplexNumber {
      */
     @Override
     public void set(String value) throws NumberFormatException {
+        if (value.endsWith("i")) {
+
+            value = value.substring(0, value.length() - 1);
+
+            if (value.endsWith("+")) {
+                this.imanginaryPart = 1;
+                value = value.substring(0, value.length() - 1);
+                this.realPart = Double.parseDouble(value);
+                return;
+            } else if (value.endsWith("-")) {
+                this.imanginaryPart = -1;
+                value = value.substring(0, value.length() - 1);
+                this.realPart = Double.parseDouble(value);
+                return;
+            } else {
+                int tempSign1 = 1;
+                if (value.startsWith("+")) {
+                    value = value.substring(1, value.length());
+                } else if (value.startsWith("-")) {
+                    tempSign1 = -1;
+                    value = value.substring(1, value.length());
+                }
+                String[] str = value.split("\\+");
+                int tempSign2 = 1;
+
+                if (str.length == 1) {
+                    str = value.split("-");
+                    tempSign2 = -1;
+                }
+
+                if (str.length == 1) {
+                    this.realPart = 0;
+                    this.imanginaryPart = tempSign1 * Double.parseDouble(str[0]);
+                    return;
+                }
+                this.realPart = tempSign1 * Double.parseDouble(str[0]);
+                this.imanginaryPart = tempSign2 * Double.parseDouble(str[1]);
+            }
+        } else {
+            this.realPart = Double.parseDouble(value);
+            this.imanginaryPart = 0;
+            return;
+        }
 
     }
 
@@ -100,8 +190,69 @@ public class ComplexNumberImpl implements ComplexNumber {
      */
     @Override
     public ComplexNumber clone() throws CloneNotSupportedException {
-        return null;
+
+        return (ComplexNumberImpl) super.clone();
     }
+
+    /**
+     * Returns a string representation of this number, which must be compatible with {@link #set(String)}:
+     * for any ComplexNumber x, the code <code>x.set(x.toString());</code> must not change x.<br/>
+     * For example: 12.5-1.0i or 0.0 or 0.3333333333333333i<br/>
+     * If the imaginary part of the number is 0, only "re" must be returned (where re is the real part).<br/>
+     * If the real part of the number is 0 and the imaginary part is not 0,
+     *  "imi" must be returned (where im is the imaginary part).<br/>
+     * Both re and im must be converted to string "as is" - without truncation of last digits,
+     * i.e. the number of characters in their string representation is not limited
+     *   (it is determined by {@link Double#toString(double)}).
+     * @see Object#toString()
+     */
+
+    @Override
+    public String toString() {
+        String reStr="";
+        String imStr="";
+        if(realPart>0){
+            reStr=Double.toString(realPart);
+        }
+        if(realPart<0){
+            reStr=Double.toString(realPart);
+        }
+        if(imanginaryPart<0){
+            reStr=Double.toString(imanginaryPart)+"i";
+        }
+        if(imanginaryPart>0){
+            imStr=Double.toString(imanginaryPart)+"i";
+            if(realPart!=0){
+                imStr="+"+imStr;
+            }
+        }
+
+        return reStr+imStr;
+    }
+
+    /**
+     * Checks whether some other object is "equal to" this number.
+     * @param /other Any implementation of {@link ComplexNumber} interface (it may not be instance of ComplexNumberImpl!)
+     * @see Object#equals(Object)
+     */
+    public boolean equals(Object  obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof ComplexNumber)) {
+            return false;
+        }
+        ComplexNumber other = (ComplexNumber) obj;
+        if(this.getRe()!=other.getRe()){
+            return false;
+        }
+        if(this.getIm()!=other.getIm()){
+            return false;
+        }
+        return true;
+    }
+
+
 
     /**
      * Compares this number with the other number by the absolute values of the numbers:
@@ -138,7 +289,14 @@ public class ComplexNumberImpl implements ComplexNumber {
      */
     @Override
     public void sort(ComplexNumber[] array) {
-
+        Arrays.sort(array, new Comparator<ComplexNumber>() {
+            @Override
+            public int compare(ComplexNumber o1, ComplexNumber o2) {
+                double firstNum = o1.getRe() * o1.getRe() + o1.getIm() * o1.getIm();
+                double secondNum = o2.getRe() * o2.getRe() + o2.getIm() * o2.getIm();
+                return o1.compareTo(o2);
+            }
+        });
     }
 
     /**
